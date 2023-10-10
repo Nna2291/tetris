@@ -10,6 +10,6 @@ if __name__ == '__main__':
     except TooLowSize:
         sys.exit('Size of your terminal is too small, change the size and rerun app')
     try:
-        GameWindow(0.9, 0.99)
+        GameWindow(0.9, 0.9)
     except ValueError:
         sys.exit('Proportions are to big or to small!')
