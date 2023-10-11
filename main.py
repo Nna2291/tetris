@@ -1,6 +1,7 @@
 import sys
 
 from app.windows.start_window import StartWindow
+# import app.windows.game_window
 from app.windows.game_window import GameWindow
 from exceptions import TooLowSize
 
@@ -10,6 +11,8 @@ if __name__ == '__main__':
     except TooLowSize:
         sys.exit('Size of your terminal is too small, change the size and rerun app')
     try:
-        GameWindow(0.9, 0.9)
+        window = GameWindow(0.9, 0.9)
+        pass
     except ValueError:
         sys.exit('Proportions are to big or to small!')
+    
