@@ -4,3 +4,11 @@ class TooLowSize(Exception):
 
     def __str__(self):
         return self.message
+
+
+class ProportionsError(Exception):
+    def __init__(self):
+        self.message = 'Proportions are too big or too small!'
+
+    def __str__(self):
+        return self.message
