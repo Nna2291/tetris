@@ -11,8 +11,8 @@ if __name__ == '__main__':
     except TooLowSize:
         sys.exit('Size of your terminal is too small, change the size and rerun app')
     try:
-        window = GameWindow(0.9, 0.9, 700)
-        window.run_game()
+        window = GameWindow(0.9, 0.35, 700)
     except ProportionsError:
         sys.exit('Proportions are to big or to small!')
-    
+    while True:
+        window.run_game()
