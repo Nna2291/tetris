@@ -14,7 +14,7 @@ class GameWindow(Window):
         self.window = curses.initscr()
         self.window.clear()
         self.window.timeout(delay_time)
-        if not (0.3 <= y_proportions <= 0.9) or not (0.3 <= x_proportions <= 0.9):
+        if not (0.1 <= y_proportions <= 0.9) or not (0.1 <= x_proportions <= 0.9):
             raise ProportionsError()
         self.y, self.x = self.window.getmaxyx()
         self.speed = 0.2
@@ -37,10 +37,15 @@ class GameWindow(Window):
     def generate_figure():
         return random.choice(figures).split('\n')
 
+    def turn_figure(self,
+                    figure: list[str]):
+        pass
+
     def draw_figure(self,
                     figure: list[str],
                     delta_x: int,
-                    delta_y: int):
+                    delta_y: int,
+                    last_round: bool = False):
         figure_y = len(figure)
         j = -1
         game = self.game_field.copy()
@@ -51,16 +56,21 @@ class GameWindow(Window):
             new_string = self.append_to_string(
                 game[i],
                 elemnt_figure,
-                delta_x
+                delta_x,
+                self.len_tetris_x,
+                last_round
+
             )
+
             game[i] = new_string
         return game
 
     def run_game(self):
         figure = self.generate_figure()
         delta_x = 0
-
-        for i in range(self.y - self.y_free_space - 3):
+        game = []
+        i = self.y_free_space
+        while True:
             ch = self.window.getch()
             if ch == -1:
                 pass
@@ -78,3 +88,15 @@ class GameWindow(Window):
             except IndexError as e:
                 self.game_field = game
                 return
+            except ValueError:
+                game = self.draw_figure(
+                    figure,
+                    delta_x,
+                    (len(figure) + 1 * i) + 1,
+                    True)
+
+                self.draw_field(self.y, self.y_free_space, game)
+                self.game_field = game
+                return
+            i += 1
+    # def
