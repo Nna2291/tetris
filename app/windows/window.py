@@ -7,6 +7,7 @@ from exceptions import TooLowSize
 class Window:
     def __init__(self):
         self.window = curses.initscr()
+        self.window.clear()
         curses.echo()
         self.y, self.x = self.window.getmaxyx()
         if self.x < 20 or self.y < 20:
@@ -71,12 +72,13 @@ class Window:
         return new_string
 
     def draw_field(self, y: int,
-                   free_y: int,
                    game: list[str]):
         self.window.clear()
-        for i in range(free_y, y - free_y):
+        j = 0
+        for i in range(y, y + len(game) + 1):
             try:
-                self.add_string_middle_x(game[i], i)
+                self.add_string_middle_x(game[j], i)
             except IndexError:
                 pass
+            j += 1
         self.window.refresh()

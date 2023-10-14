@@ -1,7 +1,4 @@
-import sys
-
 from app.windows.window import Window
-from exceptions import TooLowSize
 
 
 class StartWindow(Window):
