@@ -16,8 +16,8 @@ class GameWindow(Window):
         Window.__init__(self)
 
         self.score = 0
+        self.__y, self.__x = self.window.getmaxyx()
         self.__game_field = []
-
         self.__window = curses.initscr()
         self.__window.clear()
         self.__window.timeout(delay_time)
@@ -143,3 +143,7 @@ class GameWindow(Window):
                 self.__game_field = temp_field
                 self.check_field()
                 break
+
+    def close_window(self):
+        self.__window.clear()
+        curses.endwin()
