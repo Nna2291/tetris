@@ -7,3 +7,8 @@
 ***
 
 Реализация игры тетрис на питоне без использования сторонних библиотек
+
+## Диаграма классов
+
+![alt text for screen readers](classes.jpg "Text to show on mouseover")
+

@@ -1,4 +1,7 @@
-figures = [
+DELAY_TIME = 777
+X_PROPORTIONS = 0.5
+Y_PROPORTIONS = 0.7
+FIGURES = [
 """#
 #
 #

@@ -1,7 +1,7 @@
 import curses
 import random
 
-from app.data.figures import figures
+from app.config import FIGURES
 from app.windows.window import Window
 from exceptions import ProportionsError
 
@@ -16,33 +16,32 @@ class GameWindow(Window):
         Window.__init__(self)
 
         self.score = 0
-        self.game_field = []
+        self.__game_field = []
 
-        self.window = curses.initscr()
-        self.window.clear()
-        self.window.timeout(delay_time)
+        self.__window = curses.initscr()
+        self.__window.clear()
+        self.__window.timeout(delay_time)
 
-        self.y, self.x = self.window.getmaxyx()
-        self.len_tetris_y = int(self.y * y_proportions)
-        self.len_tetris_x = int(self.x * x_proportions)
-        self.x_free_space = (self.x - self.len_tetris_x) // 2
-        self.y_free_space = (self.y - self.len_tetris_y) // 2
+        self.__len_tetris_y = int(self.__y * y_proportions)
+        self.__len_tetris_x = int(self.__x * x_proportions)
+        self.__x_free_space = (self.__x - self.__len_tetris_x) // 2
+        self.__y_free_space = (self.__y - self.__len_tetris_y) // 2
 
-        for i in range(self.y_free_space, self.y - self.y_free_space):
-            if i == self.y - self.y_free_space - 1:
-                self.add_string_middle_x('*' * self.len_tetris_x, i)
-                self.game_field.append('*' * self.len_tetris_x)
+        for i in range(self.__y_free_space, self.__y - self.__y_free_space):
+            if i == self.__y - self.__y_free_space - 1:
+                self.add_string_middle_x('*' * self.__len_tetris_x, i)
+                self.__game_field.append('*' * self.__len_tetris_x)
             elif i == 0:
-                self.add_string_middle_x(' ' * self.len_tetris_x, i)
-                self.game_field.append(' ' * self.len_tetris_x)
+                self.add_string_middle_x(' ' * self.__len_tetris_x, i)
+                self.__game_field.append(' ' * self.__len_tetris_x)
             else:
-                self.add_string_middle_x('|' + ' ' * (self.len_tetris_x - 2) + '|', i)
-                self.game_field.append('|' + ' ' * (self.len_tetris_x - 2) + '|')
+                self.add_string_middle_x('|' + ' ' * (self.__len_tetris_x - 2) + '|', i)
+                self.__game_field.append('|' + ' ' * (self.__len_tetris_x - 2) + '|')
         # breakpoint()
 
     @staticmethod
     def generate_figure():
-        return random.choice(figures).split('\n')
+        return random.choice(FIGURES).split('\n')
 
     @staticmethod
     def find(s, ch):
@@ -67,7 +66,7 @@ class GameWindow(Window):
                    figure: list[str],
                    delta_x: int,
                    delta_y: int):
-        field = self.game_field.copy()
+        field = self.__game_field.copy()
 
         j = -1
         for i in range(delta_y, delta_y + len(figure)):
@@ -105,23 +104,23 @@ class GameWindow(Window):
         return field, delta_x
 
     def check_field(self):
-        field = self.game_field
+        field = self.__game_field
 
         for i, el in enumerate(field):
             if el.count('#') != len(el) - 2:
                 continue
             del field[i]
-            field[0] = '|' + ' ' * (self.len_tetris_x - 2) + '|'
+            field[0] = '|' + ' ' * (self.__len_tetris_x - 2) + '|'
             field.insert(0, '     ')
             self.score += 1
-        self.draw_field(self.y_free_space, self.game_field)
+        self.draw_field(self.__y_free_space, self.__game_field)
 
     def start_game(self):
         figure = self.generate_figure()
         i = 0
         delta_x = 0
         while True:
-            ch = self.window.getch()
+            ch = self.__window.getch()
             if ch == -1:
                 pass
             elif chr(ch) == 'a':
@@ -138,9 +137,9 @@ class GameWindow(Window):
                     delta_x,
                     i
                 )
-                self.draw_field(self.y_free_space, temp_field)
+                self.draw_field(self.__y_free_space, temp_field)
                 i += 1
             except IndexError:
-                self.game_field = temp_field
+                self.__game_field = temp_field
                 self.check_field()
                 break

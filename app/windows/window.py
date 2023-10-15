@@ -6,16 +6,14 @@ from exceptions import TooLowSize
 class Window:
     def __init__(self):
         self.window = curses.initscr()
-        self.window.clear()
+        # self.__window.clear()
         curses.echo()
-        self.y, self.x = self.window.getmaxyx()
-        if self.x < 20 or self.y < 20:
+        self.__y, self.__x = self.window.getmaxyx()
+        if self.__x < 20 or self.__y < 20:
             raise TooLowSize()
 
-        self.y_mid = self.y // 2
-        self.x_mid = self.x // 2
-
-        self.maximum_delta_x = 0
+        self.y_mid = self.__y // 2
+        self.x_mid = self.__x // 2
 
     def add_string_middle(self, text: str,
                           delta_x: int = 0,
@@ -31,7 +29,7 @@ class Window:
                           delta_x: int = 0,
                           delta_y: int = 0):
         self.window.addstr(
-            self.y - delta_y - 1,
+            self.__y - delta_y - 1,
             (self.x_mid - len(text) // 2) + delta_x,
             text
         )
