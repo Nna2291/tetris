@@ -31,9 +31,6 @@ class GameWindow(Window):
             if i == self.__y - self.__y_free_space - 1:
                 self.add_string_middle_x('*' * self.__len_tetris_x, i)
                 self.__game_field.append('*' * self.__len_tetris_x)
-            elif i == 0:
-                self.add_string_middle_x(' ' * self.__len_tetris_x, i)
-                self.__game_field.append(' ' * self.__len_tetris_x)
             else:
                 self.add_string_middle_x('|' + ' ' * (self.__len_tetris_x - 2) + '|', i)
                 self.__game_field.append('|' + ' ' * (self.__len_tetris_x - 2) + '|')
@@ -46,6 +43,11 @@ class GameWindow(Window):
     @staticmethod
     def find(s, ch):
         return [i for i, ltr in enumerate(s) if ltr == ch]
+
+    def find_empty_spaces(self):
+        field = self.__game_field.copy()
+        fiel = list(filter(lambda x: set(list(x)) == {' ', '|'}, field))
+        return len(fiel)
 
     @staticmethod
     def turn_figure(figure: list[str]):
@@ -67,7 +69,9 @@ class GameWindow(Window):
                    delta_x: int,
                    delta_y: int):
         field = self.__game_field.copy()
-
+        empty_spaces = self.find_empty_spaces()
+        if empty_spaces <= len(figure):
+            raise UnboundLocalError
         j = -1
         for i in range(delta_y, delta_y + len(figure)):
             j += 1
@@ -111,7 +115,7 @@ class GameWindow(Window):
                 continue
             del field[i]
             field[0] = '|' + ' ' * (self.__len_tetris_x - 2) + '|'
-            field.insert(0, '     ')
+            # field.insert(0, '     ')
             self.score += 1
         self.draw_field(self.__y_free_space, self.__game_field)
 
@@ -140,8 +144,11 @@ class GameWindow(Window):
                 self.draw_field(self.__y_free_space, temp_field)
                 i += 1
             except IndexError:
-                self.__game_field = temp_field
-                self.check_field()
+                try:
+                    self.__game_field = temp_field
+                    self.check_field()
+                except UnboundLocalError:
+                    pass
                 break
 
     def close_window(self):

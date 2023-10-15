@@ -21,6 +21,7 @@ if __name__ == '__main__':
         try:
             window.start_game()
         except UnboundLocalError:
+            # pass
             window.close_window()
             break
     GameOverWindow(window.score)
